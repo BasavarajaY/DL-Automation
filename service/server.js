@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/util/MockServer"],function(t){"use strict";return{init:function(){var e=new t({rootUri:"V2/northwind/northwind.svc"});t.config({autoRespond:true,autoRespondAfter:1e3});var r=jQuery.sap.getModulePath("sap.anz.mvc.service");e.simulate(r+"/metadata.xml",r);e.start()}}});

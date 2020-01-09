@@ -1,0 +1,56 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.extentia.dlrulecreate.controller.DLRuleAdd"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<Panel backgroundDesign="Solid" class="sapUiResponsiveContentPadding" visible="true">
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="true" emptySpanL="1" emptySpanM="1" labelSpanL="3" labelSpanM="3"
+					layout="ResponsiveGridLayout" maxContainerCols="3" title="">
+					<f:content>
+						<Label text="Field Name" required="true"/>
+						<Select change="onRuleNameChange" id="inputRuleName" items="{RuleNamesDD>/}" width="auto">
+							<core:ListItem id="RuleNames_item" key="{RuleNamesDD>RuleKey}" text="{RuleNamesDD>RuleDesc}" tooltip="{RuleNamesDD>RuleDesc}"></core:ListItem>
+						</Select>
+						<Button text="Add" press="onAddRuleNames" class="sapUiSmallMarginBegin" width="30%"></Button>
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+	</Panel>
+	<Panel backgroundDesign="Solid" class="sapUiResponsiveContentPadding" visible="true">
+		<VBox id="panelVBox">
+			<!--<Panel expandable="true" expanded="false" width="auto"></Panel>-->
+			
+		</VBox>
+		<!--<VBox items="{RuleNameRows>/}">-->
+		<!--	<Panel expandable="true" expanded="false" width="auto">-->
+		<!--		<headerToolbar>-->
+		<!--			<Toolbar height="3rem">-->
+		<!--				<Text text="Name: {RuleNameRows>RowName}"/>-->
+		<!--				<ToolbarSpacer/>-->
+		<!--<Button icon="sap-icon://add" press="doAdd"/>-->
+		<!--				<Button icon="sap-icon://less" press="doDelete"/>-->
+		<!--			</Toolbar>-->
+		<!--		</headerToolbar>-->
+		<!--		<content>-->
+		<!--<Text text="{RuleNameRows>content}"/>-->
+		<!--			<f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="true" emptySpanL="1" emptySpanM="1" labelSpanL="3" labelSpanM="3"-->
+		<!--				layout="ResponsiveGridLayout" maxContainerCols="3" title="">-->
+		<!--				<f:content>-->
+		<!--					<Select id="inputConditions" items="{ConditionsDD>/}" width="auto">-->
+		<!--						<core:ListItem id="Cond_item" key="{ConditionsDD>key}" text="{ConditionsDD>desc}" tooltip="{ConditionsDD>desc}"></core:ListItem>-->
+		<!--					</Select>-->
+		<!--					<Input placeholder="Region" value="Region"/>-->
+		<!--					<Select id="inputOperations" items="{OperationsDD>/}" width="auto">-->
+		<!--						<core:ListItem id="Operat_item" key="{OperationsDD>key}" text="{OperationsDD>desc}" tooltip="{OperationsDD>desc}"></core:ListItem>-->
+		<!--					</Select>-->
+		<!--					<HBox>-->
+		<!--						<Button class="sapUiTinyMarginBegin" icon="sap-icon://decline" press="onDeleteItem" width="20%"/>-->
+		<!--						<Button class="sapUiTinyMarginBegin" icon="sap-icon://add" press="onAddItems" width="20%"/>-->
+		<!--					</HBox>-->
+		<!--				</f:content>-->
+		<!--			</f:SimpleForm>-->
+		<!--		</content>-->
+		<!--	</Panel>-->
+		<!--</VBox>-->
+	</Panel>
+</mvc:View>

@@ -1,0 +1,139 @@
+{
+    "resources": [
+        {
+            "name": "controller/NotFound.controller.js"
+        },
+        {
+            "name": "i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "service/server.js"
+        },
+        {
+            "name": "model/models.js"
+        },
+        {
+            "name": "manifest.json"
+        },
+        {
+            "name": "controller/NoMatching.controller.js"
+        },
+        {
+            "name": "controller/Main.controller.js"
+        },
+        {
+            "name": "controller/ListPage.controller.js"
+        },
+        {
+            "name": "controller/DLRuleCreate.controller.js"
+        },
+        {
+            "name": "controller/DLRuleAdd.controller.js"
+        },
+        {
+            "name": "controller/DLList.controller.js"
+        },
+        {
+            "name": "Component.js"
+        },
+        {
+            "name": "manifest-bundle.zip"
+        },
+        {
+            "name": "Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": "service/server-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "model/models-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/NotFound-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/NoMatching-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/Main-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/ListPage-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/DLRuleCreate-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/DLRuleAdd-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "controller/DLList-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "Component-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../../sap-ui-version.json"
+        },
+        {
+            "name": "neo-app.json"
+        },
+        {
+            "name": "di.code-validation.core_issues.json"
+        },
+        {
+            "name": "view/NotFound.view.xml"
+        },
+        {
+            "name": "view/NoMatching.view.xml"
+        },
+        {
+            "name": "view/Main.view.xml"
+        },
+        {
+            "name": "view/DLRuleCreate.view.xml"
+        },
+        {
+            "name": "view/DLRuleAdd.view.xml"
+        },
+        {
+            "name": "view/DLListPage.view.xml"
+        },
+        {
+            "name": "view/DLList.view.xml"
+        },
+        {
+            "name": "service/metadata.xml"
+        },
+        {
+            "name": "fragments/ValueHelpDialogFilterbar.fragment.xml"
+        },
+        {
+            "name": "fragments/ValueHelpDialog.fragment.xml"
+        },
+        {
+            "name": "fragments/RuleDialog.fragment.xml"
+        },
+        {
+            "name": "fragments/FilterDialog.fragment.xml"
+        },
+        {
+            "name": "css/style.css"
+        },
+        {
+            "name": "index.html"
+        }
+    ]
+}

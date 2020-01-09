@@ -1,0 +1,1 @@
+sap.ui.define(["com/extentia/dlrulecreate/controller/Main.controller"],function(t){"use strict";QUnit.module("Main Controller");QUnit.test("I should test the Main controller",function(n){var e=new t;e.onInit();n.ok(e)})});
