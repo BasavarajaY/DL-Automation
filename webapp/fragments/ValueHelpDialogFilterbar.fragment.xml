@@ -1,0 +1,24 @@
+<core:FragmentDefinition xmlns="sap.ui.comp.valuehelpdialog" xmlns:m="sap.m" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
+	<ValueHelpDialog title="{LocalViewSetting>/valueHelpFieldName}" ok="onValueHelpOkPress" cancel="onValueHelpCancelPress"
+		afterClose="onValueHelpAfterClose" supportRanges="false" key="key" descriptionKey="desc">
+		<filterBar>
+			<fb:FilterBar advancedMode="true" search="onFilterBarSearch">
+				<fb:filterGroupItems>
+					<fb:FilterGroupItem groupName="gn1" name="FieldName" label="{LocalViewSetting>/valueHelpFieldName}" visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="{LocalViewSetting>/valueHelpFieldName}"/>
+						</fb:control>
+					</fb:FilterGroupItem>
+					<fb:FilterGroupItem groupName="gn2" name="Condition" label="Condition" visibleInFilterBar="true">
+						<fb:control>
+							<m:Select change="onRelOperationsDDChange" id="inputCondition" items="{OperationsDD>/}" width="auto">
+								<core:ListItem id="Condition_item" key="{OperationsDD>key}" text="{OperationsDD>desc}" tooltip="{OperationsDD>desc}"></core:ListItem>
+							</m:Select>
+						</fb:control>
+					</fb:FilterGroupItem>
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar>
+		<!--<m:MessageStrip text="Relation is: {LocalViewSetting>/messageStripText}" showIcon="true" showCloseButton="true" class="sapUiMediumMarginBottom"></m:MessageStrip>-->
+	</ValueHelpDialog>
+</core:FragmentDefinition>

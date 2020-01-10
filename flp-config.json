@@ -1,0 +1,35 @@
+{
+    "application": {
+        "id": "",
+        "title": "com.extentia.dlrulecreate.dlrulecreate",
+        "description": "DL Rule create",
+        "type": "SAP_UI5_Component",
+        "componentUrl": "/",
+        "appUrl": "#dlrulecreate-Display",
+        "navigationComponentName": "com.extentia.dlrulecreate",
+        "intentSemanticObject": "dlrulecreate",
+        "intentAction": "Display",
+        "html5ApplicationName": "dlrulecreate",
+        "HCPParentApplicationName": ""
+    },
+    "assignment": {
+        "groups": [
+            "8032698f-2af5-47d6-937e-7b6ac2ea4bbd"
+        ],
+        "contentPackages": [
+            "b3a8f96d-8176-4c34-83b6-f3a46f1a436a"
+        ],
+        "categories": []
+    },
+    "tile": {
+        "type": "StaticTile",
+        "title": "DL Rule",
+        "subtitle": "Create",
+        "searchKeywords": "DL Rule,Create",
+        "displayIconUrl": "sap-icon://approvals",
+        "displayInfoText": "",
+        "size": "1x1",
+        "serviceURL": "",
+        "refreshInterval": ""
+    }
+}

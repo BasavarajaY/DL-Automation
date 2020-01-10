@@ -1,0 +1,84 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.extentia.dlrulecreate.controller.DLList"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar" displayBlock="true"
+	xmlns:table="sap.ui.table">
+	<fb:FilterBar search="onSearch" id="FilterBar" reset="onReset" showRestoreOnFB="false" showRestoreButton="false" filterBarExpanded="true"
+		filterContainerWidth="15rem">
+		<fb:filterItems>
+			<fb:FilterItem id="Region" name="Region" label="Region" labelTooltip="Region" mandatory="false" visible="true">
+				<fb:control>
+					<MultiInput id="inputRegionF4" valueHelpRequest="RegionF4"></MultiInput>
+				</fb:control>
+			</fb:FilterItem>
+			<fb:FilterItem id="SubRegion" name="SubRegion" label="SubRegion" labelTooltip="SubRegion" mandatory="false" visible="true">
+				<fb:control>
+					<MultiInput id="inputSubRegionF4" valueHelpRequest="SubRegionF4"></MultiInput>
+				</fb:control>
+			</fb:FilterItem>
+			<fb:FilterItem id="CompanyCode" name="CompanyCode" label="CompanyCode" labelTooltip="CompanyCode" mandatory="false" visible="true">
+				<fb:control>
+					<MultiInput id="inputCompanyCodeF4" valueHelpRequest="CompanyCodeF4"></MultiInput>
+				</fb:control>
+			</fb:FilterItem>
+		</fb:filterItems>
+	</fb:FilterBar>
+	<Panel xmlns="sap.m" class="sapUiResponsiveContentPadding" backgroundDesign="Solid">
+		<content>
+			<Table id="ListTable" items="{ListItems>/}" inset="false" noDataText="No Data" class="sapUiNoMargin" busy="false" visible="true">
+				<headerToolbar>
+					<Toolbar id="ListTableToolBar">
+						<Title id="ListTableTitle"
+							text="{i18n>List.Table.Title} {= (!${LocalViewSetting>/ListItemsCount} > 0) ? '' : '('+${LocalViewSetting>/ListItemsCount}+')'}" level="H2"/>
+						<ToolbarSpacer></ToolbarSpacer>
+						<Button id="RuleCreate" icon="sap-icon://create" press="handleRuleCreate" text="{i18n>List.Create.Rule}" tooltip="{i18n>List.Create.Rule}">
+							<customData>
+								<core:CustomData key="multi" value="true"/>
+								<core:CustomData key="remember" value="true"/>
+							</customData>
+						</Button>
+						<Button id="ListTableFilterSorterButton" icon="sap-icon://add-filter" press="handleViewSettingsDialogButtonPressed"
+							tooltip="{i18n>List.Table.FilterSorterTooltip}"></Button>
+						<Button id="ListTableExportButton" icon="sap-icon://download" tooltip="{i18n>List.Table.ExportToExcelTooltip}" press="exportToExcel"
+							visible="{= ${device>/system/phone}? false : true}"/>
+					</Toolbar>
+				</headerToolbar>
+				<infoToolbar>
+					<Toolbar id="ListTableInfoToolBar" active="true" visible="false" press="handleViewSettingsDialogButtonPressed">
+						<Label id="ListTableInfoToolBarLabel" text="?"/>
+					</Toolbar>
+				</infoToolbar>
+				<columns>
+					<Column mergeDuplicates="true" mergeFunctionName="getTitle">
+						<Text text="Region"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
+						<Text text="SubRegion"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
+						<Text text="CompanyCode"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
+						<Text text="Solutions"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
+						<Text text="Primary Hub"/>
+					</Column>
+					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
+						<Text text="Secondary Hub"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem id="columnListItem" press="gotoDetails" type="Navigation">
+						<cells>
+							<ObjectIdentifier title="{ListItems>Region}" class="sapUiTinyMarginTopBottom"/>
+							<Text text="{ListItems>SubRegion}" tooltip="SubRegion"/>
+							<Text text="{ListItems>CompanyCode}" tooltip="CompanyCode"/>
+							<Text text="{ListItems>Solutions}" tooltip="Solutions"/>
+							<Text text="{ListItems>PrimaryHub}" tooltip="PrimaryHub"/>
+							<Text text="{ListItems>SecondaryHub}" tooltip="SecondaryHub"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Panel>
+</mvc:View>

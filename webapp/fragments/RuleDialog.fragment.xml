@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+	<SelectDialog noDataText="{i18n>SelectDialog.noDataText}" title="{i18n>SelectDialog.title}" search="handleSearch" confirm="handleSelect" items="{checkBoxItems>/}"
+		rememberSelections="true">
+		<StandardListItem title="{checkBoxItems>value}" type="Active" selected="{checkBoxItems>selected}"/>
+	</SelectDialog>
+	<!--<Dialog title="Create Rule" contentWidth="130px" contentHeight="350px" resizable="true">-->
+	<!--	<content>-->
+	<!--<l:Grid defaultSpan="L12 M12 S12" width="auto">-->
+	<!--	<l:content>-->
+	<!--		<f:Form id="FormChange354" editable="true">-->
+	<!--			<f:layout>-->
+	<!--				<f:ResponsiveGridLayout labelSpanL="3" labelSpanM="3" emptySpanL="4" emptySpanM="4" columnsL="3" columnsM="3"/>-->
+	<!--			</f:layout>-->
+	<!--			<f:formContainers>-->
+	<!--				<f:FormContainer>-->
+	<!--					<f:formElements>-->
+	<!--						<f:FormElement>-->
+	<!--							<f:fields>-->
+	<!--								<VBox items="{checkBoxItems>/}">-->
+	<!--									<items>-->
+	<!--										<CheckBox text="{checkBoxItems>value}" selected="{checkBoxItems>selected}"/>-->
+	<!--									</items>-->
+	<!--								</VBox>-->
+	<!--							</f:fields>-->
+	<!--						</f:FormElement>-->
+	<!--					</f:formElements>-->
+	<!--				</f:FormContainer>-->
+	<!--			</f:formContainers>-->
+	<!--		</f:Form>-->
+	<!--	</l:content>-->
+	<!--</l:Grid>-->
+	<!--<VBox items="{checkBoxItems>/}">-->
+	<!--	<items>-->
+	<!--		<CheckBox text="{checkBoxItems>value}" selected="{checkBoxItems>selected}"/>-->
+	<!--	</items>-->
+	<!--</VBox>-->
+	<!--	</content>-->
+	<!--	<beginButton>-->
+	<!--		<Button text="Cancel" press="onCancel"/>-->
+	<!--	</beginButton>-->
+	<!--	<endButton>-->
+	<!--		<Button text="Submit" press="onSubmit"></Button>-->
+	<!--	</endButton>-->
+	<!--</Dialog>-->
+</core:FragmentDefinition>

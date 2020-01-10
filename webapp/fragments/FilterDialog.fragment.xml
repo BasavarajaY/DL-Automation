@@ -1,0 +1,39 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ViewSettingsDialog confirm="sortAndFilterTable">
+		<sortItems>
+			<ViewSettingsItem text="Region" key="Region"/>
+			<ViewSettingsItem text="SubRegion" key="SubRegion"/>
+			<ViewSettingsItem text="Company Code" key="CompanyCode"/>
+			<ViewSettingsItem text="Solutions" key="Solutions"/>
+			<ViewSettingsItem text="Primary Hub" key="PrimaryHub"/>
+			<ViewSettingsItem text="Secondary Hub" key="SecondaryHub"/>
+		</sortItems>
+		<filterItems>
+			<ViewSettingsCustomItem text="Region" key="Region">
+				<customControl>
+					<Input tooltip="Region" liveChange="addCustomControlToFilter"/>
+				</customControl>
+			</ViewSettingsCustomItem>
+			<ViewSettingsCustomItem text="Company Code" key="CompanyCode">
+				<customControl>
+					<Input tooltip="CompanyCode" liveChange="addCustomControlToFilter"/>
+				</customControl>
+			</ViewSettingsCustomItem>
+			<ViewSettingsCustomItem text="Solutions" key="Solutions">
+				<customControl>
+					<Input tooltip="Solutions" liveChange="addCustomControlToFilter"/>
+				</customControl>
+			</ViewSettingsCustomItem>
+			<ViewSettingsCustomItem text="Primary Hub" key="PrimaryHub">
+				<customControl>
+					<Input tooltip="PrimaryHub" liveChange="addCustomControlToFilter"/>
+				</customControl>
+			</ViewSettingsCustomItem>
+			<ViewSettingsCustomItem text="SecondaryHub" key="SecondaryHub">
+				<customControl>
+					<Input tooltip="Secondary Hub" liveChange="addCustomControlToFilter"/>
+				</customControl>
+			</ViewSettingsCustomItem>
+		</filterItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
