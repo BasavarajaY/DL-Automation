@@ -33,17 +33,113 @@ sap.ui.define([
 			this.setConditionsDD();
 			this.setOperationsDD();
 			this.setRelOperationsDD();
+			this.setDLTypeDD();
+			this.setHeadCountTypeDD();
+
 		},
 		setDefaultSettings: function () {
 			var oViewSettingModel = new sap.ui.model.json.JSONModel();
 			var viewSettingData = {
 				valueHelpFieldName: "",
-				messageStripText: ""
+				messageStripText: "",
+				FNameVisible: false
 			};
 			oViewSettingModel.setData(viewSettingData);
 			this.getView().setModel(oViewSettingModel, "LocalViewSetting");
 		},
-		setRuleNamesDD: function () {
+		setDLTypeDD: function () {
+			var oDLTypeData = [{
+				key: "",
+				desc: ""
+			}, {
+				key: "01",
+				desc: "Primary"
+			}, {
+				key: "02",
+				desc: "Secondary"
+			}, {
+				key: "03",
+				desc: "Additional"
+			}];
+			var oDLTypeModel = new sap.ui.model.json.JSONModel();
+			oDLTypeModel.setData(oDLTypeData);
+			this.getView().setModel(oDLTypeModel, "DLTypeDD");
+		},
+		setHeadCountTypeDD: function () {
+			var oHeadCountData = [{
+				key: "",
+				desc: ""
+			}, {
+				key: "01",
+				desc: "COE"
+			}, {
+				key: "02",
+				desc: "NonVAT"
+			}, {
+				key: "03",
+				desc: "Presales"
+			}, {
+				key: "04",
+				desc: "SolExp"
+			}, {
+				key: "05",
+				desc: "VAT"
+			}, {
+				key: "05",
+				desc: "XME"
+			}];
+			var oHeadCountModel = new sap.ui.model.json.JSONModel();
+			oHeadCountModel.setData(oHeadCountData);
+			this.getView().setModel(oHeadCountModel, "HeadCountTypeDD");
+		},
+		onDLTypeChange: function (oEvent) {
+			var selectedKey = oEvent.getSource().getSelectedKey();
+			// if (selectedKey !== "") {
+			// 	this.getView().getModel("LocalViewSetting").setProperty("/FNameVisible", true);
+			// 	this.getView().byId("FnameTitle").setText("Define Rule for DL");
+			// 	// this.setRuleNamesDD(selectedKey);
+			// } else {
+			// 	this.getView().getModel("LocalViewSetting").setProperty("/FNameVisible", false);
+			// 	this.getView().byId("FnameTitle").setText("");
+			// 	this.getView().byId("HeadCountDLType").setSelectedKey("");
+			// }
+			// var oVid = this.getView().byId("panelVBox");
+			// oVid.removeAllItems();
+		},
+		setRuleNamesDD: function (selectedKey) {
+			var oDataRuleNames = "";
+			if (selectedKey === "01") {
+				oDataRuleNames = [{
+					RuleKey: "01",
+					RuleDesc: "Region"
+				}, {
+					RuleKey: "02",
+					RuleDesc: "Primary Hub"
+				}];
+			} else if (selectedKey === "02") {
+				oDataRuleNames = [{
+					RuleKey: "01",
+					RuleDesc: "Region"
+				}, {
+					RuleKey: "02",
+					RuleDesc: "Secondary Hub"
+				}];
+			} else if (selectedKey === "03") {
+				oDataRuleNames = [{
+					RuleKey: "01",
+					RuleDesc: "Region"
+				}, {
+					RuleKey: "02",
+					RuleDesc: "Additional Hub"
+				}];
+			} else {
+				oDataRuleNames = [];
+			}
+			var oRuleNameModel = new sap.ui.model.json.JSONModel();
+			oRuleNameModel.setData(oDataRuleNames);
+			this.getView().setModel(oRuleNameModel, "RuleNamesDD");
+		},
+		setRuleNamesDDOldLogic: function () {
 			// if (!this._fraDialog) {
 			// 	this._fraDialog = sap.ui.xmlfragment("fragmId", "com.extentia.dlrulecreate.fragments.RuleDialog", this);
 			// 	this.getView().addDependent(this._fraDialog);
@@ -88,10 +184,10 @@ sap.ui.define([
 		},
 		setConditionsDD: function () {
 			var oCondData = [{
-				key: "01",
+				key: "I",
 				desc: "include"
 			}, {
-				key: "02",
+				key: "E",
 				desc: "exclude"
 			}];
 			var oConditionsModel = new sap.ui.model.json.JSONModel();
@@ -100,13 +196,13 @@ sap.ui.define([
 		},
 		setOperationsDD: function () {
 			var oOpeData = [{
-				key: "00",
+				key: "",
 				desc: ""
 			}, {
-				key: "01",
+				key: "OR",
 				desc: "OR"
 			}, {
-				key: "02",
+				key: "AND",
 				desc: "AND"
 			}];
 			var oOpersModel = new sap.ui.model.json.JSONModel();
@@ -115,15 +211,23 @@ sap.ui.define([
 		},
 		setRelOperationsDD: function () {
 			var oOpeData = [{
-				key: "01",
+				key: "OR",
 				desc: "OR"
 			}, {
-				key: "02",
+				key: "AND",
 				desc: "AND"
 			}];
 			var oOpersModel = new sap.ui.model.json.JSONModel();
 			oOpersModel.setData(oOpeData);
 			this.getView().setModel(oOpersModel, "RelOperationsDD");
+		},
+		onCollapseAllPress: function (evt) {
+			var oMainPanel = this.getView().byId("mainPanel");
+			if (oMainPanel.getExpanded())
+				oMainPanel.setExpanded(false);
+			else
+				oMainPanel.setExpanded(true);
+			// oMainPanel.setExpanded(true);
 		},
 		onAddRuleNames: function (oEvent) {
 			this.handleAddRuleNames(oEvent);
@@ -138,6 +242,98 @@ sap.ui.define([
 		// 	grid.addContent(hbox);
 		// 	return grid;
 		// },
+		addFieldNames: function (oEvent) {
+			if (!this._fraDialog) {
+				this._fraDialog = sap.ui.xmlfragment("fragmId", "com.extentia.dlrulecreate.fragments.RuleDialog", this);
+			}
+			// Multi-select if required
+			var bMultiSelect = !!oEvent.getSource().data("multi");
+			this._fraDialog.setMultiSelect(bMultiSelect);
+
+			// Remember selections if required
+			var bRemember = !!oEvent.getSource().data("remember");
+			this._fraDialog.setRememberSelections(bRemember);
+
+			// clear the old search filter
+			//this._fraDialog.getBinding("items").filter([]);
+
+			jQuery.sap.syncStyleClass(this.getView().getController().getOwnerComponent().getContentDensityClass(), this.getView(), this._fraDialog);
+
+			this.setCheckBoxItems();
+			this.getView().addDependent(this._fraDialog);
+			// this._fraDialog.setModel(this.getView().setModel("checkBoxItems"));
+			this._fraDialog.open();
+		},
+		handleSearch: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilter = new sap.ui.model.Filter("value", sap.ui.model.FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getSource().getBinding("items");
+			oBinding.filter([oFilter]);
+		},
+		handleSelect: function (oEvent) {
+			var aContexts = oEvent.getParameter("selectedContexts");
+			if (aContexts.length) {
+				var OChkBoxItems = [];
+				aContexts.map(function (oContext) {
+					OChkBoxItems.push({
+						RuleKey: oContext.getObject().key,
+						RuleDesc: oContext.getObject().value
+					});
+				});
+				gDLRuleAddView.getModel("RuleNamesDD").setProperty("/", OChkBoxItems);
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+		},
+		setCheckBoxItems: function () {
+			var oView = gDLRuleAddView;
+			if (oView.getModel("RuleNamesDD")) {
+				var oChkBoxItems = oView.getModel("RuleNamesDD").getProperty("/");
+			}
+			var oDialogItemsData = [{
+				key: "01",
+				value: "Region",
+				selected: false
+			}, {
+				key: "02",
+				value: "SubRegion",
+				selected: false
+			}, {
+				key: "03",
+				value: "Primary Hub",
+				selected: false
+			}, {
+				key: "04",
+				value: "Primary Hub DL",
+				selected: false
+			}, {
+				key: "05",
+				value: "Secondary Hub",
+				selected: false
+			}, {
+				key: "06",
+				value: "Secondary Hub DL",
+				selected: false
+			}, {
+				key: "07",
+				value: "Company Code",
+				selected: false
+			}, {
+				key: "08",
+				value: "Solutions",
+				selected: false
+			}];
+			for (var i = 0; i < oDialogItemsData.length; i++) {
+				for (var k = 0; k < oChkBoxItems.length; k++) {
+					if (oDialogItemsData[i].value === oChkBoxItems[k].RuleDesc) {
+						oDialogItemsData[i].selected = true;
+					}
+				}
+			}
+			var oDialogModel = new sap.ui.model.json.JSONModel();
+			oDialogModel.setData(oDialogItemsData);
+			// this.getView().setModel(oDialogModel, "checkBoxItems");
+			this._fraDialog.setModel(oDialogModel, "checkBoxItems");
+		},
 		handleAddRuleNames: function (oEvent) {
 			var oVid = this.getView().byId("panelVBox");
 			var vBoxItems = oVid.getItems();
@@ -150,13 +346,13 @@ sap.ui.define([
 			}
 			if (flag) {
 				if (vBoxItems.length > 0) {
-					var hBoxContent = this.addHBoxCondContent(true);
+					var hBoxContent = this.addHBoxCondContent(true, ruleName);
 					var hBoxRelContent = this.addHBoxRelContent(true, ruleName);
 					var oPanelContent = this.addPanelContent(hBoxContent, hBoxRelContent);
 					oVid.addItem(oPanelContent);
 
 				} else {
-					var hBoxContent1 = this.addHBoxCondContent(true);
+					var hBoxContent1 = this.addHBoxCondContent(true, ruleName);
 					// var hBoxRelContent = this.addHBoxRelContent(true);
 					var oPanelContent1 = this.addPanelContent(hBoxContent1, false);
 					oVid.addItem(oPanelContent1);
@@ -172,9 +368,9 @@ sap.ui.define([
 		addHBoxRelContent: function (newItem, ruleName) {
 			var that = this;
 			var oRelHBox = new sap.m.HBox({
-				justifyContent: 'SpaceBetween',
+				justifyContent: "SpaceBetween",
 				width: "24rem",
-				alignContent: 'Center'
+				alignContent: "Center"
 
 			});
 			var conSelect = new sap.m.Select({
@@ -198,26 +394,41 @@ sap.ui.define([
 							desc: vBoxItems[i].getHeaderText()
 						});
 					}
-					// if (this.getView().getModel("RelNameDD")) {
-					// 	this.getView().setModel("RelNameDD", []);
-					// }
+					if (this.getView().getModel("RelNameDD")) {
+						this.getView().setModel("RelNameDD", []);
+					}
 					var oRelsModel = new sap.ui.model.json.JSONModel();
 					oRelsModel.setData(oRelNames);
-					ruleName + "DD";
-					var OModelName = ruleName + "DD";
-					this.getView().setModel(oRelsModel, OModelName);
+					this.getView().setModel(oRelsModel, "RelNameDD");
 				}
+				// if (vBoxItems.length > 0) {
+				// 	var oRelNames = [];
+				// 	for (var i = 0; i < vBoxItems.length; i++) {
+				// 		oRelNames.push({
+				// 			key: vBoxItems[i].getHeaderText(),
+				// 			desc: vBoxItems[i].getHeaderText()
+				// 		});
+				// 	}
+				// 	// if (this.getView().getModel("RelNameDD")) {
+				// 	// 	this.getView().setModel("RelNameDD", []);
+				// 	// }
+				// 	var oRelsModel = new sap.ui.model.json.JSONModel();
+				// 	oRelsModel.setData(oRelNames);
+				// 	ruleName + "DD";
+				// 	var OModelName = ruleName + "DD";
+				// 	this.getView().setModel(oRelsModel, OModelName);
+				// }
 			}
 			var ruleSelect = new sap.m.Select({
 				width: "8rem"
 			});
-			ruleSelect.setModel(this.getView().getModel(OModelName));
-			
+			ruleSelect.setModel(this.getView().getModel("RelNameDD"));
+
 			var ruleItemTemplate = new sap.ui.core.Item({
-				key: "{OModelName>key}",
-				text: "{OModelName>desc}"
+				key: "{RelNameDD>key}",
+				text: "{RelNameDD>desc}"
 			});
-			ruleSelect.bindItems("OModelName>/", ruleItemTemplate);
+			ruleSelect.bindItems("RelNameDD>/", ruleItemTemplate);
 
 			var operSelect = new sap.m.Select({
 				// class: "sapUiSmallMarginBegin"
@@ -861,15 +1072,30 @@ sap.ui.define([
 					})
 				);
 			}
-
 			oValueHelpDialog.setFilterBar(oFilterBar);
 		},
-		addHBoxCondContent: function (newItem) {
+		addHBoxCondContent: function (newItem, ruleName) {
 			var that = this;
+			var operSelectEnabled = true;
+			var hBoxWidth = "";
+			var mInputWidth = "";
+			var operSelectVisible = true;
+
+			if (ruleName === "Region") {
+				operSelectEnabled = false;
+				hBoxWidth = "18rem";
+				mInputWidth = "10rem";
+				operSelectVisible = false;
+			} else {
+				operSelectEnabled = true;
+				hBoxWidth = "35rem";
+				mInputWidth = "15rem";
+				operSelectVisible = true;
+			}
 			var hbox = new sap.m.HBox({
-				justifyContent: 'SpaceBetween',
-				width: "50%",
-				alignContent: 'Center'
+				justifyContent: "SpaceBetween",
+				width: hBoxWidth,
+				alignContent: "Center"
 
 			});
 			var conSelect = new sap.m.Select({
@@ -883,8 +1109,8 @@ sap.ui.define([
 			conSelect.bindItems("ConditionsDD>/", itemTemplate);
 
 			var oMultiInput = new sap.m.MultiInput({
-				width: "15rem",
-				fieldWidth: "15rem",
+				width: mInputWidth,
+				fieldWidth: mInputWidth,
 				valueHelpRequest: function (oEvent) {
 					// that.setRegionF4(oEvent);
 					this.onValueHelpRequested(oEvent);
@@ -894,6 +1120,8 @@ sap.ui.define([
 
 			var operSelect = new sap.m.Select({
 				// class: "sapUiSmallMarginBegin"
+				enabled: operSelectEnabled,
+				visible: operSelectVisible,
 				change: function (oEvent) {
 					this.setSelectedOper(oEvent);
 				}.bind(this)
@@ -909,6 +1137,7 @@ sap.ui.define([
 				text: "",
 				icon: "sap-icon://decline",
 				//enabled: false,
+				visible: operSelectVisible,
 				press: function (oEvent) {
 					// var src = oEvent.getSource();
 					this.deleteRowItems(oEvent);
@@ -919,6 +1148,7 @@ sap.ui.define([
 				// class: "sapUiTinyMarginBegin",
 				icon: "sap-icon://add",
 				enabled: false,
+				visible: operSelectVisible,
 				press: function (oEvent) {
 					that.addRowItems(oEvent);
 				}
@@ -1040,6 +1270,10 @@ sap.ui.define([
 			oMultiInput = oEvent.getSource();
 			var headerText = oEvent.getSource().getParent().getParent().getParent().getHeaderText();
 			this.getView().getModel("LocalViewSetting").setProperty("/valueHelpFieldName", headerText);
+			var bSupportMultiselect = true;
+			if (headerText === "Region") {
+				bSupportMultiselect = false;
+			}
 			var oVid = this.getView().byId("panelVBox");
 			var vBoxItems = oVid.getItems();
 			var aValidated = true;
@@ -1120,7 +1354,7 @@ sap.ui.define([
 
 				this._oValueHelpDialog = sap.ui.xmlfragment("com.extentia.dlrulecreate.fragments.ValueHelpDialogFilterbar", this);
 				jQuery.sap.syncStyleClass(this.getView().getController().getOwnerComponent().getContentDensityClass(), this.getView(), this._oValueHelpDialog);
-
+				//this._oValueHelpDialog.getFilterBar().getFilterGroupItems()[1].getControl().setSelectedKey(oMultiInput.getDescription());
 				this.getView().addDependent(this._oValueHelpDialog);
 
 				this._oValueHelpDialog.setRangeKeyFields([{
@@ -1128,6 +1362,15 @@ sap.ui.define([
 					key: headerText,
 					type: "string"
 				}]);
+				if (bSupportMultiselect) {
+					this._oValueHelpDialog.setSupportMultiselect(true);
+					this._oValueHelpDialog.getFilterBar().getFilterGroupItems()[1].getControl().setSelectedKey("");
+					this._oValueHelpDialog.getFilterBar().getFilterGroupItems()[1].getControl().setEditable(true);
+				} else {
+					this._oValueHelpDialog.setSupportMultiselect(true);
+					this._oValueHelpDialog.getFilterBar().getFilterGroupItems()[1].getControl().setSelectedKey("OR");
+					this._oValueHelpDialog.getFilterBar().getFilterGroupItems()[1].getControl().setEditable(false);
+				}
 				// this._oValueHelpDialog.getFilterBar().setBasicSearch(this._oBasicSearchField);
 
 				this._oValueHelpDialog.getTableAsync().then(function (oTable) {
@@ -1207,13 +1450,14 @@ sap.ui.define([
 			if (aTokens.length > 0) {
 				if ((aTokens.length > 1 && fSelKey !== "00") || aTokens.length === 1) {
 					oMultiInput.setTokens(aTokens);
+					oMultiInput.setDescription(fSelKey);
 					var oMessage = "";
 					for (var i = 0; i < aTokens.length; i++) {
 						var tText = aTokens[i].getText().split("(")[0];
 						if (aTokens[i] === aTokens[0]) {
 							oMessage += tText;
 						} else {
-							if (fSelKey === "01") {
+							if (fSelKey === "OR") {
 								oMessage += " || " + tText;
 							} else {
 								oMessage += " && " + tText;

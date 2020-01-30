@@ -1,0 +1,61 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.extentia.dlrulecreate.controller.DLDetail"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:uxap="sap.uxap" xmlns:l="sap.ui.layout">
+	<Page title="Rule Details" showNavButton="true" navButtonType="Back" navButtonPress="navigateBack">
+		<content>
+			<uxap:ObjectPageLayout id="DLDetailObjectPageLayout" enableLazyLoading="false" flexEnabled="true" isChildPage="false"
+				showHeaderContent="true" showTitleInHeaderContent="false" subSectionLayout="TitleOnTop">
+				<uxap:headerTitle>
+					<uxap:ObjectPageHeader objectImageURI="sap-icon://kpi-managing-my-area" id="DLDetailObjectPageHeader"
+						objectTitle="{LocalViewSettingDLDtl>/DLName}" objectImageShape="Circle" objectImageAlt="" objectSubtitle="" isObjectIconAlwaysVisible="true">
+						<uxap:actions>
+							<Button text="Edit" tooltip="Edit" icon="sap-icon://edit" press="onEdit" visible="false"/>
+							<uxap:ObjectPageHeaderActionButton text="Toggle Footer" hideIcon="true" hideText="false" press="toggleFooter"/>
+						</uxap:actions>
+					</uxap:ObjectPageHeader>
+				</uxap:headerTitle>
+				<uxap:headerContent>
+					<l:VerticalLayout>
+						<ObjectStatus title="Rule Name" text="{LocalViewSettingDLDtl>/RuleName}"/>
+						<ObjectStatus title="Region" text="{LocalViewSettingDLDtl>/Region}"/>
+					</l:VerticalLayout>
+				</uxap:headerContent>
+				<uxap:sections>
+					<uxap:ObjectPageSection id="DLHEADER" title="DL Info" visible="true">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection id="DLHEADERSSectionSS1" title="DL Info">
+								<uxap:blocks>
+									<mvc:XMLView visible="true" id="DLBasicDetailBlockView" viewName="com.extentia.dlrulecreate.view.block.DLBasicDetailBlock"/>
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+					<uxap:ObjectPageSection id="DLUserDetail" title="Users" visible="true">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection id="DLITEMSSSectionSS1" title="Users">
+								<uxap:blocks>
+									<mvc:XMLView visible="true" id="DLUserDetailView" viewName="com.extentia.dlrulecreate.view.block.DLUserDetailBlock"/>
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+				</uxap:sections>
+				<uxap:footer>
+					<OverflowToolbar>
+						<ToolbarSpacer/>
+						<Button type="Reject" icon="sap-icon://reset" text="Cancel" press="onCancel" visible="{LocalViewSettingDLDtl>/editMode}"/>
+						<Button icon="sap-icon://edit" text="Edit" press="onEdit" visible="{LocalViewSettingDLDtl>/detailMode}"/>
+						<Button type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{LocalViewSettingDLDtl>/editMode}"/>
+					</OverflowToolbar>
+				</uxap:footer>
+			</uxap:ObjectPageLayout>
+		</content>
+		<!--<footer>-->
+		<!--	<Toolbar>-->
+		<!--		<ToolbarSpacer/>-->
+		<!--		<Button type="Reject" icon="sap-icon://reset" text="Cancel" press="onCancel" visible="{LocalViewSettingDLDtl>/detailMode}"/>-->
+		<!--		<Button icon="sap-icon://edit" text="Edit" press="onEdit" visible="{LocalViewSettingDLDtl>/editMode}"/>-->
+		<!--		<Button type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{LocalViewSettingDLDtl>/detailMode}"/>-->
+		<!--	</Toolbar>-->
+		<!--</footer>-->
+	</Page>
+</mvc:View>

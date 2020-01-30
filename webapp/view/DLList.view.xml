@@ -4,6 +4,14 @@
 	<fb:FilterBar search="onSearch" id="FilterBar" reset="onReset" showRestoreOnFB="false" showRestoreButton="false" filterBarExpanded="true"
 		filterContainerWidth="15rem">
 		<fb:filterItems>
+			<fb:FilterItem id="ruleName" name="RuleName" label="Rule Name" labelTooltip="RuleName" mandatory="false" visible="true">
+				<fb:control>
+					<MultiInput id="multiInput" suggestionItems="{RuleNameList>/}" valueHelpRequest="handleValueHelp">
+						<core:Item key="{RuleNameList>key}" text="{RuleNameList>desc}"/>
+					</MultiInput>
+					<!--<MultiInput id="inputRuleName" valueHelpRequest="RuleNameF4"></MultiInput>-->
+				</fb:control>
+			</fb:FilterItem>
 			<fb:FilterItem id="Region" name="Region" label="Region" labelTooltip="Region" mandatory="false" visible="true">
 				<fb:control>
 					<MultiInput id="inputRegionF4" valueHelpRequest="RegionF4"></MultiInput>
@@ -19,66 +27,177 @@
 					<MultiInput id="inputCompanyCodeF4" valueHelpRequest="CompanyCodeF4"></MultiInput>
 				</fb:control>
 			</fb:FilterItem>
+			<fb:FilterItem id="BusinessUnit" name="BusinessUnit" label="Business Unit" labelTooltip="Business Unit" mandatory="false" visible="false">
+				<fb:control>
+					<MultiInput id="inputBusinessUnitF4" valueHelpRequest="BusinessUnitF4"></MultiInput>
+				</fb:control>
+			</fb:FilterItem>
 		</fb:filterItems>
 	</fb:FilterBar>
 	<Panel xmlns="sap.m" class="sapUiResponsiveContentPadding" backgroundDesign="Solid">
 		<content>
-			<Table id="ListTable" items="{ListItems>/}" inset="false" noDataText="No Data" class="sapUiNoMargin" busy="false" visible="true">
-				<headerToolbar>
-					<Toolbar id="ListTableToolBar">
+			<table:Table id="UIRuleTable" rows="{ListItems>/}" showColumnVisibilityMenu="true" enableGrouping="false" selectionMode="None"
+				enableSelectAll="false" noData="No Data" enableColumnFreeze="true" minAutoRowCount="8" visibleRowCount="8"
+				visible="{= (${device>/system/phone} || ${device>/system/tablet})? false : true}" visibleRowCountMode="Fixed">
+				<table:toolbar>
+					<Toolbar id="UIListTableToolBar">
 						<Title id="ListTableTitle"
 							text="{i18n>List.Table.Title} {= (!${LocalViewSetting>/ListItemsCount} > 0) ? '' : '('+${LocalViewSetting>/ListItemsCount}+')'}" level="H2"/>
-						<ToolbarSpacer></ToolbarSpacer>
+						<ToolbarSpacer/>
 						<Button id="RuleCreate" icon="sap-icon://create" press="handleRuleCreate" text="{i18n>List.Create.Rule}" tooltip="{i18n>List.Create.Rule}">
 							<customData>
 								<core:CustomData key="multi" value="true"/>
 								<core:CustomData key="remember" value="true"/>
 							</customData>
 						</Button>
-						<Button id="ListTableFilterSorterButton" icon="sap-icon://add-filter" press="handleViewSettingsDialogButtonPressed"
-							tooltip="{i18n>List.Table.FilterSorterTooltip}"></Button>
 						<Button id="ListTableExportButton" icon="sap-icon://download" tooltip="{i18n>List.Table.ExportToExcelTooltip}" press="exportToExcel"
 							visible="{= ${device>/system/phone}? false : true}"/>
 					</Toolbar>
-				</headerToolbar>
-				<infoToolbar>
-					<Toolbar id="ListTableInfoToolBar" active="true" visible="false" press="handleViewSettingsDialogButtonPressed">
-						<Label id="ListTableInfoToolBarLabel" text="?"/>
-					</Toolbar>
-				</infoToolbar>
-				<columns>
-					<Column mergeDuplicates="true" mergeFunctionName="getTitle">
-						<Text text="Region"/>
-					</Column>
-					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
-						<Text text="SubRegion"/>
-					</Column>
-					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
-						<Text text="CompanyCode"/>
-					</Column>
-					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
-						<Text text="Solutions"/>
-					</Column>
-					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
-						<Text text="Primary Hub"/>
-					</Column>
-					<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">
-						<Text text="Secondary Hub"/>
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem id="columnListItem" press="gotoDetails" type="Navigation">
-						<cells>
-							<ObjectIdentifier title="{ListItems>Region}" class="sapUiTinyMarginTopBottom"/>
-							<Text text="{ListItems>SubRegion}" tooltip="SubRegion"/>
-							<Text text="{ListItems>CompanyCode}" tooltip="CompanyCode"/>
-							<Text text="{ListItems>Solutions}" tooltip="Solutions"/>
-							<Text text="{ListItems>PrimaryHub}" tooltip="PrimaryHub"/>
-							<Text text="{ListItems>SecondaryHub}" tooltip="SecondaryHub"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
+				</table:toolbar>
+				<table:Column sortProperty="RuleName" filterProperty="RuleName" autoResizable="true" tooltip="RuleName">
+					<Text text="RuleName"/>
+					<table:template>
+						<Link text="{= ${ListItems>RuleID} !== '' ? ${ListItems>RuleName} +' ('+ ${ListItems>RuleID}+')' : ${ListItems>RuleName} }"
+							press="onRuleIdPress"></Link>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="DLName" width="9%" filterProperty="DLName" autoResizable="true" tooltip="DLName">
+					<Text text="DL Name"/>
+					<table:template>
+						<Text text="{ListItems>DLName}" tooltip="DLName"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="DLDescription" width="7%" filterProperty="DLDescription" autoResizable="true" tooltip="DLName" visible="false">
+					<Text text="DL Description"/>
+					<table:template>
+						<Text text="{ListItems>DLDescription}" tooltip="DLDescription"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="Region" width="9%" filterProperty="Region" autoResizable="true" tooltip="Region">
+					<Text text="Region"/>
+					<table:template>
+						<Text text="{ListItems>Region}" tooltip="Region"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="SubRegion" width="8%" filterProperty="SubRegion" autoResizable="true" tooltip="SubRegion">
+					<Text text="SubRegion"/>
+					<table:template>
+						<Button id="SRQuickView" icon="sap-icon://background" text=" " press="handleSRQuickViewPress" tooltip="SubRegion" textDirection="Inherit"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="PrimaryHub" filterProperty="PrimaryHub" autoResizable="true" tooltip="PrimaryHub">
+					<Text text="PrimaryHub"/>
+					<table:template>
+						<Text text="{ListItems>PrimaryHub}" tooltip="PrimaryHub"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="PrimaryHubDL" filterProperty="PrimaryHubDL" autoResizable="true" tooltip="PrimaryHubDL">
+					<Text text="PrimaryHubDL"/>
+					<table:template>
+						<Text text="{ListItems>PrimaryHubDL}" tooltip="PrimaryHubDL"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="SecondaryHub" filterProperty="SecondaryHub" autoResizable="true" tooltip="SecondaryHub">
+					<Text text="SecondaryHub"/>
+					<table:template>
+						<Text text="{ListItems>SecondaryHub}" tooltip="SecondaryHub"/>
+					</table:template>
+				</table:Column>
+				<table:Column sortProperty="SecondaryHubDL" filterProperty="SecondaryHubDL" autoResizable="true" tooltip="SecondaryHubDL">
+					<Text text="SecondaryHubDL"/>
+					<table:template>
+						<Text text="{ListItems>SecondaryHubDL}" tooltip="SecondaryHubDL"/>
+					</table:template>
+				</table:Column>
+				<!--<table:Column sortProperty="CompanyCode" filterProperty="CompanyCode" autoResizable="true" tooltip="CompanyCode">-->
+				<!--	<Text text="CompanyCode"/>-->
+				<!--	<table:template>-->
+				<!--		<Text text="{ListItems>CompanyCode}" tooltip="CompanyCode"/>-->
+				<!--	</table:template>-->
+				<!--</table:Column>-->
+				<table:Column autoResizable="true" tooltip="DisplayDL" width="3%">
+					<Text text=""/>
+					<table:template>
+						<Button id="dispalyDL" icon="sap-icon://company-view" press="onDisplayDL" tooltip="DL Detail" textDirection="RTL"/>
+					</table:template>
+				</table:Column>
+			</table:Table>
+			<!--<Table id="ListTable" items="{ListItems>/}" inset="false" noDataText="No Data" class="sapUiNoMargin" busy="false" visible="true">-->
+			<!--	<headerToolbar>-->
+			<!--		<Toolbar id="ListTableToolBar">-->
+			<!--			<Title id="ListTableTitle"-->
+			<!--				text="{i18n>List.Table.Title} {= (!${LocalViewSetting>/ListItemsCount} > 0) ? '' : '('+${LocalViewSetting>/ListItemsCount}+')'}" level="H2"/>-->
+			<!--			<ToolbarSpacer></ToolbarSpacer>-->
+			<!--			<Button id="RuleCreate" icon="sap-icon://create" press="handleRuleCreate" text="{i18n>List.Create.Rule}" tooltip="{i18n>List.Create.Rule}">-->
+			<!--				<customData>-->
+			<!--					<core:CustomData key="multi" value="true"/>-->
+			<!--					<core:CustomData key="remember" value="true"/>-->
+			<!--				</customData>-->
+			<!--			</Button>-->
+			<!--			<Button id="ListTableFilterSorterButton" icon="sap-icon://add-filter" press="handleViewSettingsDialogButtonPressed"-->
+			<!--				tooltip="{i18n>List.Table.FilterSorterTooltip}"></Button>-->
+			<!--			<Button id="ListTableExportButton" icon="sap-icon://download" tooltip="{i18n>List.Table.ExportToExcelTooltip}" press="exportToExcel"-->
+			<!--				visible="{= ${device>/system/phone}? false : true}"/>-->
+			<!--		</Toolbar>-->
+			<!--	</headerToolbar>-->
+			<!--	<infoToolbar>-->
+			<!--		<Toolbar id="ListTableInfoToolBar" active="true" visible="false" press="handleViewSettingsDialogButtonPressed">-->
+			<!--			<Label id="ListTableInfoToolBarLabel" text="?"/>-->
+			<!--		</Toolbar>-->
+			<!--	</infoToolbar>-->
+			<!--	<columns>-->
+			<!--		<Column mergeDuplicates="true" mergeFunctionName="getTitle">-->
+			<!--			<Text text="Rule Name"/>-->
+			<!--		</Column>-->
+			<!--<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--	<Text text="RuleName"/>-->
+			<!--</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Region"/>-->
+			<!--		</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="SubRegion"/>-->
+			<!--		</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Primary Hub"/>-->
+			<!--		</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Primary Hub DL"/>-->
+			<!--		</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Secondary Hub"/>-->
+			<!--		</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Secondary Hub DL"/>-->
+			<!--		</Column>-->
+			<!--<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--	<Text text="CompanyCode"/>-->
+			<!--</Column>-->
+			<!--		<Column demandPopin="true" minScreenWidth="Desktop" popinDisplay="Inline">-->
+			<!--			<Text text="Solutions"/>-->
+			<!--		</Column>-->
+			<!--	</columns>-->
+			<!--	<items>-->
+			<!--		<ColumnListItem id="columnListItem" press="gotoDetails" type="Detail">-->
+			<!--			<cells>-->
+			<!--<ObjectIdentifier title="{ListItems>RuleName}" class="sapUiTinyMarginTopBottom"/>-->
+			<!--				<Link text="{= ${ListItems>RuleID} !== '' ? ${ListItems>RuleName} +' ('+ ${ListItems>RuleID}+')' : ${ListItems>RuleName} }"-->
+			<!--					press="onRuleIdPress"></Link>-->
+			<!--<Text  text="{ListItems>RuleName}" tooltip="RuleName"/>-->
+			<!--				<Text text="{ListItems>Region}" tooltip="Region"/>-->
+			<!--<Text text="{ListItems>SubRegion}" tooltip="SubRegion"/>-->
+			<!--				<Button id="SRQuickView" icon="sap-icon://background" press="handleSRQuickViewPress" tooltip="SubRegion"/>-->
+			<!--				<Text text="{ListItems>PrimaryHub}" tooltip="PrimaryHub"/>-->
+			<!--				<Text text="{ListItems>PrimaryHubDL}" tooltip="PrimaryHub"/>-->
+			<!--				<Text text="{ListItems>SecondaryHub}" tooltip="SecondaryHub"/>-->
+			<!--				<Text text="{ListItems>SecondaryHubDL}" tooltip="SecondaryHub"/>-->
+			<!--<Text text="{ListItems>CompanyCode}" tooltip="CompanyCode"/>-->
+			<!--<ObjectNumber number="{ListItems>CompanyCode}" emphasized="false" textAlign="Right"/>-->
+			<!--				<Text text="{ListItems>Solutions}" tooltip="Solutions"/>-->
+			<!--			</cells>-->
+			<!--		</ColumnListItem>-->
+			<!--	</items>-->
+			<!--</Table>-->
 		</content>
 	</Panel>
 </mvc:View>

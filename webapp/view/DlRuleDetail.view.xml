@@ -1,0 +1,69 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="com.extentia.dlrulecreate.controller.DlRuleDetail" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:uxap="sap.uxap"
+	xmlns:l="sap.ui.layout">
+	<Page title="Rule Details" showNavButton="true" navButtonType="Back" navButtonPress="navigateBack">
+		<content>
+			<uxap:ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" flexEnabled="true" isChildPage="false" showHeaderContent="true"
+				showTitleInHeaderContent="false" subSectionLayout="TitleOnTop">
+				<uxap:headerTitle>
+					<uxap:ObjectPageHeader objectImageURI="sap-icon://legend" id="ObjectPageHeader" objectTitle="{LocalViewSettingDtl>/RuleName}"
+						objectImageShape="Circle" objectImageAlt="" objectSubtitle="" isObjectIconAlwaysVisible="true">
+						<uxap:actions>
+							<Button text="Edit" tooltip="Edit" icon="sap-icon://edit" press="onEdit" visible="false"/>
+						</uxap:actions>
+					</uxap:ObjectPageHeader>
+				</uxap:headerTitle>
+				<uxap:headerContent>
+					<l:VerticalLayout>
+						<ObjectStatus title="DL Name" text="{LocalViewSettingDtl>/DLName}"/>
+						<ObjectStatus title="Region Name" text="{LocalViewSettingDtl>/Region}"/>
+					</l:VerticalLayout>
+					<!--<l:VerticalLayout visible="true">-->
+					<!--	<ObjectStatus title="Region" tooltip="Region" text="Region"/>-->
+					<!--	<ObjectStatus title="SubRegion" tooltip="SubRegion" text="SubRegion"/>-->
+					<!--</l:VerticalLayout>-->
+					<!--<l:VerticalLayout visible="true">-->
+					<!--	<Label text="Primary Hub: " tooltip="Primary Hub: Architecting"/>-->
+					<!--	<Text text="Architecting" tooltip="Primary Hub"/>-->
+					<!--</l:VerticalLayout>-->
+					<!--<l:VerticalLayout visible="true">-->
+					<!--	<Label text="Primary Hub DL: " tooltip="Primary Hub DL: PSH-Architecting- APJ"/>-->
+					<!--	<Text text="PSH-Architecting- APJ" tooltip="Primary Hub DL"/>-->
+					<!--</l:VerticalLayout>-->
+				</uxap:headerContent>
+				<uxap:sections>
+					<!--<uxap:ObjectPageSection id="HEADER" title="Basic Details" visible="true">-->
+					<!--	<uxap:subSections>-->
+					<!--		<uxap:ObjectPageSubSection id="HEADERSSectionSS1" title="Basic Details">-->
+					<!--			<uxap:blocks>-->
+					<!--				<mvc:XMLView visible="true" id="HeaderBlockView" viewName="com.extentia.dlrulecreate.view.block.DLRuleHeaderBlock"/>-->
+					<!--			</uxap:blocks>-->
+					<!--		</uxap:ObjectPageSubSection>-->
+					<!--	</uxap:subSections>-->
+					<!--</uxap:ObjectPageSection>-->
+					<uxap:ObjectPageSection id="ITEMS" title="Rule Details" visible="true">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection id="ITEMSSSectionSS1" title="Rule Details">
+								<uxap:blocks>
+									<mvc:XMLView visible="true" id="RuleItemsView" viewName="com.extentia.dlrulecreate.view.block.DLRuleItemsBlock"/>
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+				</uxap:sections>
+			</uxap:ObjectPageLayout>
+		</content>
+		<footer>
+			<Toolbar>
+				<!--<Button id="oMessagePopoverButton" text="{= ${LocalViewSettingDtl>/messageLength} === 0 ? '' : ${LocalViewSettingDtl>/messageLength} }"-->
+				<!--	icon="{= ${LocalViewSettingDtl>/messageLength} === 0 ? '' : 'sap-icon://alert' }" press="showPopUp"-->
+				<!--	type="{= ${LocalViewSettingDtl>/messageLength} === 0 ? 'Default' : 'Emphasized' }"-->
+				<!--	enabled="{= ${LocalViewSettingDtl>/messageLength} === 0 ? false : true }"/>-->
+				<ToolbarSpacer/>
+				<Button type="Reject" icon="sap-icon://reset" text="Cancel" press="onCancel" visible="{LocalViewSettingDtl>/detailMode}"/>
+				<Button icon="sap-icon://edit" text="Edit" press="onEdit" visible="{LocalViewSettingDtl>/editMode}"/>
+				<Button type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{LocalViewSettingDtl>/detailMode}"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

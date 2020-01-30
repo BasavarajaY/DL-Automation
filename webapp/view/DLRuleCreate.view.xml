@@ -12,7 +12,7 @@
 							<Title text="DL Rule Create"></Title>
 						</contentMiddle>
 						<contentRight>
-							<Button id="addNames" text="Field Name" icon="sap-icon://add" press="addFieldNames">
+							<Button id="addNames" text="Field Name" icon="sap-icon://add" press="addFieldNames" visible="false">
 								<customData>
 									<core:CustomData key="multi" value="true"/>
 									<core:CustomData key="remember" value="true"/>
@@ -30,8 +30,8 @@
 						<!--	type="{controls>/buttonMessagesType}"></Button>-->
 						<!--<Button icon="sap-icon://alert" type="Emphasized" press="openMsgList" visible="false"/>-->
 						<ToolbarSpacer/>
-						<Button type="Reject" icon="sap-icon://reset" text="Cancel" press="onCancel" visible="{LocalViewSetting>/footerVisible}"/>
-						<Button type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="{LocalViewSetting>/footerVisible}"/>
+						<Button type="Reject" icon="sap-icon://reset" text="Cancel" press="onCancel" visible="true"/>
+						<Button type="Accept" icon="sap-icon://save" text="Save" press="onSave" visible="true"/>
 					</Toolbar>
 				</footer>
 			</Page>

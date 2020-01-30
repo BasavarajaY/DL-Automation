@@ -3,23 +3,57 @@
 	<Panel backgroundDesign="Solid" class="sapUiResponsiveContentPadding" visible="true">
 		<l:Grid defaultSpan="L12 M12 S12" width="auto">
 			<l:content>
-				<f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="true" emptySpanL="1" emptySpanM="1" labelSpanL="3" labelSpanM="3"
-					layout="ResponsiveGridLayout" maxContainerCols="3" title="">
+				<f:SimpleForm class="editableForm" columnsL="2" columnsM="2" editable="true" emptySpanL="1" emptySpanM="1" labelSpanL="3" labelSpanM="3"
+					layout="ResponsiveGridLayout" maxContainerCols="2" title="">
+					<f:toolbar>
+						<Toolbar id="TB1">
+							<Title id="Title1" text="Define Rule for DL"/>
+							<ToolbarSpacer/>
+							<Button id="addNames" text="Field Name" icon="sap-icon://add" press="addFieldNames" width="7rem">
+								<customData>
+									<core:CustomData key="multi" value="true"/>
+									<core:CustomData key="remember" value="true"/>
+								</customData>
+							</Button>
+						</Toolbar>
+					</f:toolbar>
 					<f:content>
-						<Label text="Field Name" required="true"/>
-						<Select change="onRuleNameChange" id="inputRuleName" items="{RuleNamesDD>/}" width="auto">
+						<core:Title text=""/>
+						<Label text="DL Type" required="true" visible="true"/>
+						<Select change="onDLTypeChange" id="inputDLType" items="{DLTypeDD>/}" width="auto" visible="true">
+							<core:ListItem id="DLType_item" key="{DLTypeDD>key}" text="{DLTypeDD>desc}" tooltip="{DLTypeDD>desc}"></core:ListItem>
+						</Select>
+						<Label text="HeadCount Type" required="true" visible="true"/>
+						<Select change="onHeadCountTypeChange" id="HeadCountDLType" items="{HeadCountTypeDD>/}" width="auto" visible="true">
+							<core:ListItem id="HCType_item" key="{HeadCountTypeDD>key}" text="{HeadCountTypeDD>desc}" tooltip="{HeadCountTypeDD>desc}"></core:ListItem>
+						</Select>
+						<core:Title text="" id="FnameTitle"/>
+						<!--<Label text="Select Name" required="true"/>-->
+						<!--<Button id="addNames" text="Field Name" icon="sap-icon://add" press="addFieldNames" width="7rem">-->
+						<!--	<customData>-->
+						<!--		<core:CustomData key="multi" value="true"/>-->
+						<!--		<core:CustomData key="remember" value="true"/>-->
+						<!--	</customData>-->
+						<!--</Button>-->
+						<Label text="Field Name" required="true" visible="true" width="7rem"/>
+						<Select change="onRuleNameChange" id="inputRuleName" items="{RuleNamesDD>/}" width="auto" visible="true">
 							<core:ListItem id="RuleNames_item" key="{RuleNamesDD>RuleKey}" text="{RuleNamesDD>RuleDesc}" tooltip="{RuleNamesDD>RuleDesc}"></core:ListItem>
 						</Select>
-						<Button text="Add" press="onAddRuleNames" class="sapUiSmallMarginBegin" width="30%"></Button>
+						<Button text="Add" press="onAddRuleNames" class="sapUiSmallMarginBegin" visible="true" width="6rem"></Button>
 					</f:content>
 				</f:SimpleForm>
 			</l:content>
 		</l:Grid>
 	</Panel>
-	<Panel backgroundDesign="Solid" class="sapUiResponsiveContentPadding" visible="true">
+	<Panel id="mainPanel" backgroundDesign="Solid" class="sapUiResponsiveContentPadding" visible="true" expandable="false" expanded="false">
+		<!--<headerToolbar>-->
+		<!--	<OverflowToolbar style="Clear">-->
+		<!--		<ToolbarSpacer/>-->
+		<!--		<Button icon="sap-icon://collapse" press="onCollapseAllPress" visible="false"/>-->
+		<!--	</OverflowToolbar>-->
+		<!--</headerToolbar>-->
 		<VBox id="panelVBox">
 			<!--<Panel expandable="true" expanded="false" width="auto"></Panel>-->
-			
 		</VBox>
 		<!--<VBox items="{RuleNameRows>/}">-->
 		<!--	<Panel expandable="true" expanded="false" width="auto">-->

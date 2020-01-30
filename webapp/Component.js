@@ -1,6 +1,8 @@
- gDListView = "";
- gDLRuleCreateView = "";
- gDLRuleAddView = "";
+ var gDListView = "";
+ var gDLRuleCreateView = "";
+ var gDLRuleAddView = "";
+ var gDLRuleDetailPage;
+ var gDLRuleItemsBlockView;
  sap.ui.define([
  	"sap/ui/core/UIComponent",
  	"sap/ui/Device",

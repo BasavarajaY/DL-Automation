@@ -12,6 +12,15 @@
 		"sourceTemplate": {
 			"id": "ui5template.basicSAPUI5ApplicationProject",
 			"version": "1.40.12"
+		},
+		"dataSources": {
+			"ZUDS_DLMAINTENANCE_SRV": {
+				"uri": "/sap/opu/odata/sap/ZUDS_DLMAINTENANCE_SRV",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
 		}
 	},
 	"sap.ui": {
@@ -56,6 +65,12 @@
 				"settings": {
 					"bundleName": "com.extentia.dlrulecreate.i18n.i18n"
 				}
+			},
+			"ZUDS_DLMAINTENANCE_SRV": {
+				"dataSource": "ZUDS_DLMAINTENANCE_SRV",
+				"settings": {
+					"defaultOperationMode": "sap.ui.model.odata.OperationMode.Client"
+				}
 			}
 		},
 		"resources": {
@@ -88,6 +103,20 @@
 					"pattern": "",
 					"target": [
 						"DLListPage"
+					]
+				},
+				{
+					"name": "DLRuleDetail",
+					"pattern": "DLRuleDetail/{contextPath}",
+					"target": [
+						"DlRuleDetail"
+					]
+				},
+				{
+					"name": "DLDetail",
+					"pattern": "DLDetail/{contextPath}",
+					"target": [
+						"DLDetail"
 					]
 				},
 				{
@@ -135,6 +164,30 @@
 				"NotFound": {
 					"viewType": "XML",
 					"viewName": "NotFound"
+				},
+				"DlRuleDetail": {
+					"viewType": "XML",
+					"viewName": "DlRuleDetail"
+				},
+				"DLRuleHeaderBlock": {
+					"viewType": "XML",
+					"viewName": "DLRuleHeaderBlock"
+				},
+				"DLRuleItemsBlock": {
+					"viewType": "XML",
+					"viewName": "DLRuleItemsBlock"
+				},
+				"DLDetail": {
+					"viewType": "XML",
+					"viewName": "DLDetail"
+				},
+				"DLUserDetailBlock": {
+					"viewType": "XML",
+					"viewName": "DLUserDetailBlock"
+				},
+				"DLBasicDetailBlock": {
+					"viewType": "XML",
+					"viewName": "DLBasicDetailBlock"
 				}
 			}
 		}

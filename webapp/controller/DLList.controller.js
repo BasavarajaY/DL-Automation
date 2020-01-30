@@ -3,8 +3,11 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"sap/ui/core/util/Export",
 	"sap/ui/core/util/ExportTypeCSV",
-	"sap/ui/export/Spreadsheet"
-], function (Controller, MessageBox, Export, ExportTypeCSV, Spreadsheet) {
+	"sap/ui/export/Spreadsheet",
+	"sap/ui/core/Fragment",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function (Controller, MessageBox, Export, ExportTypeCSV, Spreadsheet, Fragment, Filter, FilterOperator) {
 	"use strict";
 	var oi18n;
 	var Device = sap.ui.Device;
@@ -40,6 +43,76 @@ sap.ui.define([
 			}
 			this.setDefaultSettings();
 		},
+		handleValueHelp: function (oEvent) {
+			var sInputValue = oEvent.getSource().getValue();
+			var ruleNameData = [{
+				key: "01",
+				desc: "RuleName1",
+				selected: false
+			}, {
+				key: "02",
+				desc: "RuleName2",
+				selected: false
+			}, {
+				key: "03",
+				desc: "RuleName3",
+				selected: false
+			}, {
+				key: "04",
+				desc: "RuleName4",
+				selected: false
+			}];
+			var oListsModel = new sap.ui.model.json.JSONModel();
+			oListsModel.setData(ruleNameData);
+			this.getView().setModel(oListsModel, "RuleNameList");
+			// create value help dialog
+			if (!this._RuleNamevalueHelpDialog) {
+				Fragment.load({
+					id: "valueHelpDialog",
+					name: "com.extentia.dlrulecreate.fragments.VHDialog",
+					controller: this
+				}).then(function (oValueHelpDialog) {
+					this._RuleNamevalueHelpDialog = oValueHelpDialog;
+					this.getView().addDependent(this._RuleNamevalueHelpDialog);
+					this._openValueHelpDialog(sInputValue);
+				}.bind(this));
+			} else {
+				this._openValueHelpDialog(sInputValue);
+			}
+			jQuery.sap.syncStyleClass(this.getView().getController().getOwnerComponent().getContentDensityClass(), this.getView(), this._RuleNamevalueHelpDialog);
+		},
+		_openValueHelpDialog: function (sInputValue) {
+			// create a filter for the binding
+			// this._valueHelpDialog.getBinding("items").filter([new Filter(
+			// 	"Name",
+			// 	FilterOperator.Contains,
+			// 	sInputValue
+			// )]);
+
+			// open value help dialog filtered by the input value
+			this._RuleNamevalueHelpDialog.open(sInputValue);
+		},
+		handleValueHelpClose: function (evt) {
+			var aSelectedItems = evt.getParameter("selectedItems"),
+				oMultiInput = this.getView().byId("multiInput");
+
+			if (aSelectedItems && aSelectedItems.length > 0) {
+				aSelectedItems.forEach(function (oItem) {
+					oMultiInput.addToken(new sap.m.Token({
+						text: oItem.getTitle()
+					}));
+				});
+			}
+		},
+		_handleValueHelpSearch: function (evt) {
+			var sValue = evt.getParameter("value");
+			var oFilter = new Filter(
+				"Name",
+				FilterOperator.Contains,
+				sValue
+			);
+			evt.getSource().getBinding("items").filter([oFilter]);
+		},
 		setDefaultSettings: function () {
 			/**
 			 * All view related local settings should be mapped in a Model and is called LocalViewSetting
@@ -58,43 +131,179 @@ sap.ui.define([
 
 		onSearch: function () {
 			this.setListItems();
+			// var oItems = this.getView().getModel("ListItems").getProperty("/");
+			var oTokens = this.getView().byId("inputRegionF4");
+			var oTokenValue = oTokens.getTokens()[0].getText().split("(")[0];
+			var aFilter = [];
+			aFilter.push(new sap.ui.model.Filter("Region", sap.ui.model.FilterOperator.Contains, oTokenValue));
+			var oList = this.getView().byId("UIRuleTable");
+			var oBinding = oList.getBinding("items");
+			oBinding.filter(aFilter);
+			// oItems.filter(aFilter);
 		},
 		setListItems: function () {
 			var oListData = [{
+				RuleID: "01",
+				DLName: "DLName1",
+				DLDescription: "",
+				RuleName: "RuleName1",
 				Region: "APJ",
-				SubRegion: "ANZ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "ANZ"
+				}, {
+					label: "SubRegion",
+					value: "RNZ"
+				}],
 				CompanyCode: "0014",
 				Solutions: "Solutions1",
-				PrimaryHub: "PSH-Architecting- APJ",
-				SecondaryHub: "PSH-Public Sector Solutions- APJ"
+				PrimaryHub: "Architecting",
+				PrimaryHubDL: "PSH-Architecting- APJ",
+				SecondaryHub: "Public Sector Solutions",
+				SecondaryHubDL: "PSH-Public Sector Solutions- APJ"
 			}, {
+				RuleID: "02",
+				RuleName: "RuleName2",
+				DLName: "DLName2",
+				DLDescription: "",
 				Region: "GCO",
-				SubRegion: "APJ-Regional",
+				//SubRegion: "APJ-Regional",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "APJ-Regional"
+				}, {
+					label: "SubRegion",
+					value: "RNZ"
+				}],
 				CompanyCode: "0015",
 				Solutions: "Solutions2",
-				PrimaryHub: "PSH-Manager- APJ",
-				SecondaryHub: "PSH-DSC Supply"
+				PrimaryHub: "Manager",
+				PrimaryHubDL: "PSH-Manager- APJ",
+				SecondaryHub: "DSC Supply",
+				SecondaryHubDL: "PSH-DSC Supply"
 			}, {
+				RuleID: "03",
+				RuleName: "RuleName3",
+				DLName: "DLName3",
+				DLDescription: "",
 				Region: "GC",
-				SubRegion: "GC CN",
+				//SubRegion: "GC CN",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "GC-CN"
+				}, {
+					label: "SubRegion",
+					value: "RNZ"
+				}, {
+					label: "SubRegion",
+					value: "ISV-APJ"
+				}],
 				CompanyCode: "0016",
 				Solutions: "Solutions3",
-				PrimaryHub: "PSH-Finance- APJ",
-				SecondaryHub: "PSH-Public Sector Finance- APJ"
+				PrimaryHub: "Finance",
+				PrimaryHubDL: "PSH-Finance- APJ",
+				SecondaryHub: "Public Sector Finance",
+				SecondaryHubDL: "PSH-Public Sector Finance- APJ"
 			}, {
+				RuleID: "04",
+				RuleName: "RuleName4",
+				DLName: "DLName4",
+				DLDescription: "",
 				Region: "ISV",
-				SubRegion: "ISV-APJ",
+				//SubRegion: "ISV-APJ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "ISV-APJ"
+				}, {
+					label: "SubRegion",
+					value: "RNZ"
+				}],
 				CompanyCode: "0017",
 				Solutions: "Solutions4",
-				PrimaryHub: "PSH-Architecting- APJ",
-				SecondaryHub: "PSH-Public Sector Solutions- APJ"
+				PrimaryHub: "Architecting",
+				PrimaryHubDL: "PSH-Architecting- APJ",
+				SecondaryHub: "Public Sector Solutions",
+				SecondaryHubDL: "PSH-Public Sector Solutions- APJ"
 			}, {
+				RuleID: "05",
+				RuleName: "RuleName5",
+				DLName: "DLName5",
+				DLDescription: "",
 				Region: "APJ",
-				SubRegion: "ANZ",
+				//SubRegion: "ANZ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "ANZ-APJ"
+				}, {
+					label: "SubRegion",
+					value: "ANZ-RNZ"
+				}],
 				CompanyCode: "0014",
 				Solutions: "Solutions5",
-				PrimaryHub: "PSH-Architecting- APJ",
-				SecondaryHub: "PSH-Public Sector Solutions- APJ"
+				PrimaryHub: "Architecting",
+				PrimaryHubDL: "PSH-Architecting- APJ",
+				SecondaryHub: "PSH-Public Sector Solutions- APJ",
+				SecondaryHubDL: "Public Sector Solutions"
+			}, {
+				RuleID: "06",
+				RuleName: "RuleName6",
+				DLName: "DLName6",
+				DLDescription: "",
+				Region: "EME North",
+				//SubRegion: "ANZ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "GC-HK"
+				}, {
+					label: "SubRegion",
+					value: "EMEA BN&P"
+				}],
+				CompanyCode: "0016",
+				Solutions: "Solutions6",
+				PrimaryHub: "Banking",
+				PrimaryHubDL: "PSH-Banking",
+				SecondaryHub: "PSH-Public Sector Solutions- APJ",
+				SecondaryHubDL: "Public Sector Solutions"
+			}, {
+				RuleID: "07",
+				RuleName: "RuleName7",
+				DLName: "DLName7",
+				DLDescription: "",
+				Region: "EME South",
+				//SubRegion: "ANZ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "GK-KK"
+				}, {
+					label: "SubRegion",
+					value: "EMEA BN&PS"
+				}],
+				CompanyCode: "0017",
+				Solutions: "Solutions7",
+				PrimaryHub: "Human Resources",
+				PrimaryHubDL: "PSH-Human Resources",
+				SecondaryHub: "PSH-Public - EME South",
+				SecondaryHubDL: "Public Sector Solutions"
+			}, {
+				RuleID: "08",
+				RuleName: "RuleName8",
+				DLName: "DLName8",
+				DLDescription: "",
+				Region: "ISV",
+				//SubRegion: "ANZ",
+				SubRegion: [{
+					label: "SubRegion",
+					value: "GC"
+				}, {
+					label: "SubRegion",
+					value: "CN"
+				}],
+				CompanyCode: "0018",
+				Solutions: "Solutions8",
+				PrimaryHub: "HR",
+				PrimaryHubDL: "PSH-HR",
+				SecondaryHub: "PSH-GC",
+				SecondaryHubDL: "PSS-PSH-GC"
 			}];
 			var oListsModel = new sap.ui.model.json.JSONModel();
 			oListsModel.setData(oListData);
@@ -130,6 +339,7 @@ sap.ui.define([
 		},
 		handleRuleCreate: function (oEvent) {
 			this.setDialogCheckBox(oEvent);
+			// this._oRouter.navTo("DLRuleCreate", false);
 		},
 		setDialogCheckBox: function (oEvent) {
 			if (!this._fraDialog) {
@@ -145,9 +355,9 @@ sap.ui.define([
 
 			// clear the old search filter
 			//this._fraDialog.getBinding("items").filter([]);
-			
+
 			jQuery.sap.syncStyleClass(this.getView().getController().getOwnerComponent().getContentDensityClass(), this.getView(), this._fraDialog);
-			
+
 			this.setCheckBoxItems();
 			this.getView().addDependent(this._fraDialog);
 			// this._fraDialog.setModel(this.getView().setModel("checkBoxItems"));
@@ -201,7 +411,7 @@ sap.ui.define([
 				key: "06",
 				value: "Secondary Hub DL",
 				selected: false
-			},{
+			}, {
 				key: "07",
 				value: "Company Code",
 				selected: false
@@ -244,13 +454,13 @@ sap.ui.define([
 			var that = this;
 			var headerText = "Region";
 			this.TokenInput = oEvent.getSource();
-			this.TokenKeys = ["RegionCode", "RegionName"];
+			this.TokenKeys = ["Region", "RegionDesc"];
 			this.setValueHelp({
 				title: headerText,
 				oController: this,
 				controlID: "inputRegionF4",
-				idLabel: headerText + " Code",
-				descriptionLabel: headerText,
+				idLabel: headerText,
+				descriptionLabel: headerText + " Description",
 				tokenInput: this.TokenInput,
 				aKeys: this.TokenKeys,
 				bMultiSelect: false,
@@ -285,13 +495,13 @@ sap.ui.define([
 			var that = this;
 			var headerText = "SubRegion";
 			this.TokenInput = oEvent.getSource();
-			this.TokenKeys = ["SubRegionCode", "SubRegionName"];
+			this.TokenKeys = ["SubRegion", "SubRegionDesc"];
 			this.setValueHelp({
 				title: headerText,
 				oController: this,
 				controlID: "inputSubRegionF4",
-				idLabel: headerText + " Code",
-				descriptionLabel: headerText,
+				idLabel: headerText,
+				descriptionLabel: headerText + " Description",
 				tokenInput: this.TokenInput,
 				aKeys: this.TokenKeys,
 				bMultiSelect: false,
@@ -324,13 +534,13 @@ sap.ui.define([
 			var that = this;
 			var headerText = "Company";
 			this.TokenInput = oEvent.getSource();
-			this.TokenKeys = ["CompanyCode", "CompanyName"];
+			this.TokenKeys = ["CompanyCode", "CompanyDesc"];
 			this.setValueHelp({
 				title: headerText,
 				oController: this,
 				controlID: "inputCompanyCodeF4",
-				idLabel: headerText + " Code",
-				descriptionLabel: headerText,
+				idLabel: headerText,
+				descriptionLabel: headerText + " Description",
 				tokenInput: this.TokenInput,
 				aKeys: this.TokenKeys,
 				bMultiSelect: false,
@@ -355,8 +565,47 @@ sap.ui.define([
 				that.TokenInput.setTooltip(jData.desc);
 			});
 			//for enhancement
-			if (this.RegionF4_Exit) {
-				this.RegionF4_Exit(oEvent);
+			if (this.CompanyCodeF4_Exit) {
+				this.CompanyCodeF4_Exit(oEvent);
+			}
+		},
+		BusinessUnitF4: function (oEvent) {
+			var that = this;
+			var headerText = "Company";
+			this.TokenInput = oEvent.getSource();
+			this.TokenKeys = ["BusinessUnit", "BusinessUnit"];
+			this.setValueHelp({
+				title: headerText,
+				oController: this,
+				controlID: "inputBusinessUnitF4",
+				idLabel: headerText,
+				descriptionLabel: headerText + " Description",
+				tokenInput: this.TokenInput,
+				aKeys: this.TokenKeys,
+				bMultiSelect: false,
+				// defaultLabel: "Ship To Party",
+				// defaultText: oPPCCommon.getTextFromTokens(this.getView(), "FShipToParty"),
+				defaultVisible: false,
+				idVisible: true,
+				groupTitle: headerText,
+				fireOnLoad: false,
+				// modelID: "SCGW",
+				// entityType: "SchemeItemDetail",
+				// propName: "Region",
+				// partnerNo: this.getView().getModel("SOs").getProperty("/CustomerNo")
+			}, function (oControlEvent) {
+				var tokens = oControlEvent.getParameter("tokens");
+				var jData = tokens[0].getCustomData()[0].getValue();
+				that.TokenInput.removeAllTokens();
+				that.TokenInput.addToken(new sap.m.Token({
+					key: jData.key,
+					text: jData.desc + " (" + jData.key + ")"
+				}));
+				that.TokenInput.setTooltip(jData.desc);
+			});
+			//for enhancement
+			if (this.BusinessUnitF4_Exit) {
+				this.BusinessUnitF4_Exit(oEvent);
 			}
 		},
 		setValueHelp: function (mParameters, requestCompleted) {
@@ -531,45 +780,51 @@ sap.ui.define([
 			var oData = "";
 			if (headerText === "Region") {
 				oData = [{
-					key: "01",
+					key: "APJ",
 					desc: "APJ"
 				}, {
-					key: "02",
+					key: "GCO",
 					desc: "GCO"
 				}, {
-					key: "03",
+					key: "ISV",
 					desc: "ISV"
 				}, {
-					key: "04",
+					key: "CX",
 					desc: "CX"
 				}];
 			} else if (headerText === "SubRegion") {
 				oData = [{
-					key: "01",
+					key: "ANZ",
 					desc: "ANZ"
 				}, {
-					key: "02",
+					key: "APJ-Regional",
 					desc: "APJ-Regional"
 				}, {
-					key: "03",
+					key: "India",
 					desc: "India"
 				}, {
-					key: "04",
+					key: "GC-CN",
 					desc: "GC-CN"
 				}];
 			} else if (headerText === "Company") {
 				oData = [{
-					key: "01",
-					desc: "0014"
+					key: "0014",
+					desc: "SAP Australia Pty Ltd"
 				}, {
-					key: "02",
-					desc: "0018"
+					key: "0071",
+					desc: "SAP India Pvt. Ltd."
 				}, {
-					key: "03",
-					desc: "00123"
+					key: "0015",
+					desc: "SAP ASIA Pte Ltd"
 				}, {
-					key: "04",
-					desc: "0182"
+					key: "0038",
+					desc: "SAP (China) Co., Ltd."
+				}, {
+					key: "0093",
+					desc: "SAP(CHINA) HOLDING CO.LTD"
+				}, {
+					key: "0074",
+					desc: "SAP Hong Kong -Causeway Bay"
 				}];
 			}
 			return oData;
@@ -624,8 +879,90 @@ sap.ui.define([
 				jQuery.sap.log.error("Export error: " + sMessage);
 			});
 		},
-		gotoDetails: function(oEvent){
+		onRuleIdPress: function (oEvent) {
+			var path = "";
 			var oModelContext = oEvent.getSource().getBindingContext("ListItems");
+			path = "DLRuleSet(RuleID='" + oModelContext.getProperty("RuleID") + "',RuleName='" + oModelContext.getProperty("RuleName") +
+				"',DLName='" + oModelContext.getProperty("DLName") +
+				"',Region='" + oModelContext.getProperty("Region") + "')";
+
+			this._oRouter.navTo("DLRuleDetail", {
+				contextPath: path
+			}, false);
+		},
+		onDisplayDL: function (oEvent) {
+			var path = "";
+			var oModelContext = oEvent.getSource().getBindingContext("ListItems");
+			path = "DLDetailSet(RuleName='" + oModelContext.getProperty("RuleName") + "',DLName='" + oModelContext.getProperty("DLName") +
+				"',Region='" + oModelContext.getProperty("Region") + "')";
+
+			this._oRouter.navTo("DLDetail", {
+				contextPath: path
+			}, false);
+		},
+		handleSRQuickViewPress: function (oEvent) {
+			var oModel = this.getView().getModel("ListItems");
+			var oSubRegion = oEvent.getSource().getBindingContext("ListItems").getProperty("SubRegion");
+			var ruleName = oEvent.getSource().getBindingContext("ListItems").getProperty("RuleName");
+			this.createQuickViewModel(oEvent, ruleName, oSubRegion);
+
+		},
+		createQuickViewModel: function (oEvent, ruleName, oSubRegion) {
+			var jsonData = {
+				"pages": [{
+					"pageId": "QVPageId",
+					"header": ruleName,
+					"title": "SubRegion",
+					"icon": "sap-icon://background",
+					"groups": [{
+						"elements": oSubRegion
+					}]
+				}]
+			};
+
+			var oQVModel = new sap.ui.model.json.JSONModel();
+			oQVModel.setData(jsonData);
+			this.getView().setModel(oQVModel, "QuickViewData");
+			this.openQuickView(oEvent, this.getView().getModel("QuickViewData"));
+			//this._fraDialog.setModel(oDialogModel, "checkBoxItems");
+
+			// SubRegion: [{
+			// 	pageId: "genericPageId",
+			// 	header: "Process",
+			// 	title: "Inventarisation",
+			// 	icon: "sap-icon://camera",
+			// 	groups: [{
+			// 		elements: [{
+			// 			label: "SubRegion",
+			// 			value: "ANZ"
+			// 		}, {
+			// 			label: "SubRegion",
+			// 			value: "RNZ"
+			// 		}]
+			// 	}]
+			// }],
+		},
+		openQuickView: function (oEvent, oModel) {
+			var oButton = oEvent.getSource();
+
+			if (!this._oQuickView) {
+				Fragment.load({
+					name: "com.extentia.dlrulecreate.fragments.QuickView",
+					controller: this
+				}).then(function (oQuickView) {
+					this._oQuickView = oQuickView;
+					this._configQuickView(oModel);
+					this._oQuickView.openBy(oButton);
+				}.bind(this));
+			} else {
+				this._configQuickView(oModel);
+				this._oQuickView.openBy(oButton);
+			}
+		},
+		_configQuickView: function (oModel) {
+			this.getView().addDependent(this._oQuickView);
+			this._oQuickView.close();
+			this._oQuickView.setModel(oModel);
 		},
 
 		/**

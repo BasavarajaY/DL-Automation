@@ -1,0 +1,41 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<TableSelectDialog noDataText="No Users Found" title="Select Users" search="handleSearch" confirm="handleClose" cancel="handleClose"
+		items="{ path : 'DLUserDetails>/'}">
+		<ColumnListItem>
+			<cells>
+				<ObjectIdentifier text="{DLUserDetails>UserId}"/>
+				<Text text="{DLUserDetails>FirstName}" tooltip="FirstName"/>
+				<Text text="{DLUserDetails>LastName}" tooltip="LastName"/>
+				<Text text="{DLUserDetails>Role}" tooltip="Role"/>
+				<Text text="{DLUserDetails>Country}" tooltip="Country"/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column>
+				<header width="15rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+					<Text text="UserId" tooltip="User Id"/>
+				</header>
+			</Column>
+			<Column width="8rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+				<header>
+					<Text text="First Name" tooltip="UserId"/>
+				</header>
+			</Column>
+			<Column width="8rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+				<header>
+					<Text text="Last Name" tooltip="UserId"/>
+				</header>
+			</Column>
+			<Column width="8rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+				<header>
+					<Text text="Role" tooltip="UserId"/>
+				</header>
+			</Column>
+			<Column width="8rem" minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+				<header>
+					<Text text="Country" tooltip="Country"/>
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>
